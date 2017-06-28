@@ -1,7 +1,6 @@
 # Grab the openssldir of the system version of openssl in order to try to have
 # our version re-use the system caroots by default.
 OPENSSLDIR := $(shell openssl version -d | awk '{ print $$2 }')
-FIPSDIR := ${INSTALL_DIR}/ssl/fips2.0
 
 all: $(INSTALL_DIR)/bin/openssl
 
@@ -15,8 +14,3 @@ Makefile: config Configure
 	KERNEL_BITS=64 ./config fips --install_prefix=$(INSTALL_DIR) --with-fipsdir=$(FIPSDIR) --prefix=/ --libdir=lib --openssldir=$(OPENSSLDIR) no-shared enable-static-engine -fPIC
 	# just to be sure we don't have dregs left over
 	$(MAKE) clean
-
-# cp openssl-fips-ecp-2.0.16.tar $(INSTALL_DIR)
-# gunzip -c openssl-fips-ecp-2.0.16.tar | tar xf -
-# export FIPSDIR=$PWD/../install/ssl/fips2.0
-# 

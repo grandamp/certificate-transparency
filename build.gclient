@@ -4,6 +4,8 @@ INSTALL_DIR?=$(shell pwd)/install
 export INSTALL_DIR
 PKG_CONFIG_PATH=$(shell pwd)/install/lib/pkgconfig
 export PKG_CONFIG_PATH
+FIPSDIR=$(shell pwd)/install/ssl/fips2.0
+export FIPSDIR
 
 PHONY: libunwind tcmalloc objecthash openssl protobuf libevent libevhtp gflags glog ldns sqlite3 leveldb json-c configure-ct
 
@@ -26,6 +28,9 @@ _objecthash:
 	$(MAKE) -C certificate-transparency/third_party/objecthash -f `pwd`/certificate-transparency/build/Makefile.objecthash
 
 _openssl:
+	cp ${INSTALL_DIR}/../certificate-transparency/build/openssl-fips-2.0.16.tar.gz ${INSTALL_DIR}/..
+	gunzip -c ${INSTALL_DIR}/../openssl-fips-2.0.16.tar.gz | tar xf - -C ${INSTALL_DIR}/..
+	$(MAKE) -C openssl-fips-2.0.16 -f `pwd`/certificate-transparency/build/Makefile.fips
 	$(MAKE) -C openssl -f `pwd`/certificate-transparency/build/Makefile.openssl
 	cd openssl && git checkout -- apps/progs.h crypto/bn/bn_prime.h
 

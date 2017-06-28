@@ -1,0 +1,14 @@
+# The OpenSSL FIPS build is very specific(./config; make; make install), otherwise the build is not valid.
+# So, we are building from a local copy in our repo - this may not be the proper way to use gclient
+
+all: $(FIPSDIR)
+
+$(FIPSDIR): Makefile
+	$(MAKE)
+	$(MAKE) install
+
+Makefile: config Configure
+	./config fips
+	# just to be sure we don't have dregs left over
+	$(MAKE) clean
+
