@@ -3,15 +3,11 @@ vars = {
      # implementations below.
      # If you change this in an existing client, you should probably rm -fr
      # all the deps and rebuild everything from scratch.
-     "ssl_impl":         "openssl",
-
-     # SSL implementation alternatives:
-     "openssl": 				 "https://github.com/openssl/openssl.git@OpenSSL_1_0_2d",
-     "boringssl":        "https://boringssl.googlesource.com/boringssl.git@2883"
 }
 
 deps = {
-     Var("ssl_impl"):    Var(Var("ssl_impl")),
+     "fips": 				 "https://github.com/openssl/openssl.git@OpenSSL-fips-2_0-stable",            
+     "openssl": 				 "https://github.com/openssl/openssl.git@OpenSSL_1_1_0-stable",
      "gflags":  	 			 "https://github.com/gflags/gflags.git@v2.1.2",
      "glog":             "https://github.com/benlaurie/glog.git@0.3.4-fix",
      "googlemock": 			 "https://github.com/google/googlemock.git@release-1.7.0",
@@ -70,7 +66,6 @@ else:
 
 num_cores = multiprocessing.cpu_count()
 
-print("Building with %s" % Var("ssl_impl"))
 print("Using make %s with %d jobs" % (make, num_cores))
 
 here = os.getcwd()
@@ -87,9 +82,14 @@ hooks = [
         "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_tcmalloc" ],
     },
     {
-        "name": "ssl",
-        "pattern": Var("ssl_impl") + "/",
-        "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_" + Var("ssl_impl") ],
+        "name": "fips",
+        "pattern": "^fips/",
+        "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_fips" ],
+    },
+    {
+        "name": "openssl",
+        "pattern": "^openssl/",
+        "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_openssl" ],
     },
     {
         "name": "libevent",
@@ -145,23 +145,14 @@ hooks = [
         "name": "objecthash",
         "pattern": "^certificate-transparency/third_party/objecthash/",
         "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_objecthash" ],
-    }]
-
-# Currently only Openssl is supported for building the DNS server due to LDNS's dependency.
-if Var("ssl_impl") == 'openssl':
-  hooks.append(
-      {
-          "name": "ldns",
-          "pattern": "^ldns/",
-          "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_ldns" ],
-      })
-else:
-  print("NOT building DNS server since we're using BoringSSL.")
-
-# Do this last
-hooks.append(
+    },
+    {
+        "name": "ldns",
+        "pattern": "^ldns/",
+        "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_ldns" ],
+    },
     {
         "name": "ct",
         "pattern": "^certificate-transparency/",
         "action": [ make, "-j", str(num_cores), "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_configure-ct" ],
-    })
+    }]

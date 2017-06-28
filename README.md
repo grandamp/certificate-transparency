@@ -58,7 +58,7 @@ and then use (GNU) `make` to build and test the CT code:
 export CXX=clang++ CC=clang
 mkdir ct  # or whatever directory you prefer
 cd ct
-gclient config --name="certificate-transparency" https://github.com/google/certificate-transparency.git
+gclient config --name="certificate-transparency" https://github.com/grandamp/certificate-transparency.git
 gclient sync --disable-syntax-validation  # retrieve and build dependencies
 # substitute gmake or gnumake below if that's what your platform calls it:
 make -C certificate-transparency check  # build the CT software & self-test
