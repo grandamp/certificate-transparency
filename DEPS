@@ -6,8 +6,7 @@ vars = {
 }
 
 deps = {
-     "fips": 				 "https://github.com/openssl/openssl.git@OpenSSL-fips-2_0-stable",            
-     "openssl": 				 "https://github.com/openssl/openssl.git@OpenSSL_1_1_0-stable",
+     "openssl": 				 "https://github.com/openssl/openssl.git@OpenSSL_1_0_2d",
      "gflags":  	 			 "https://github.com/gflags/gflags.git@v2.1.2",
      "glog":             "https://github.com/benlaurie/glog.git@0.3.4-fix",
      "googlemock": 			 "https://github.com/google/googlemock.git@release-1.7.0",
@@ -80,11 +79,6 @@ hooks = [
         "name": "tcmalloc",
         "pattern": "^tcmalloc/",
         "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_tcmalloc" ],
-    },
-    {
-        "name": "fips",
-        "pattern": "^fips/",
-        "action": [ make, "-f", os.path.join(here, "certificate-transparency/build.gclient"), "_fips" ],
     },
     {
         "name": "openssl",
