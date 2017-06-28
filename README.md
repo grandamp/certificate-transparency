@@ -1,7 +1,10 @@
 certificate-transparency: Auditing for TLS certificates
 =======================================================
 
-[![Build Status](https://travis-ci.org/google/certificate-transparency.svg?branch=master)](https://travis-ci.org/google/certificate-transparency)
+NOTE
+----
+
+This is an experimental fork of https://github.com/google/certificate-transparency/, where BoringSSL support has been removed, and the OpenSSL dependency has been augmented to use the FIPS validated module.
 
  - [Introduction](#introduction)
  - [Build Quick Start](#build-quick-start)
