@@ -60,6 +60,20 @@ void InitCT(int* argc, char** argv[]) {
   // Set-up OpenSSL for multithreaded use:
   evhtp_ssl_use_threads();
 
+  // Explicitly enable FIPS for OpenSSL:
+  int mode = FIPS_mode(), ret = 0; unsigned long err = 0;
+  if(mode == 0) {
+    ret = FIPS_mode_set(1 /*on*/);
+    if(ret != 1) {
+      err = ERR_get_error();
+    }
+  }
+  if(ret != 1) {
+    LOG(WARNING) << "Failed to set FIPS validated mode of operation: " << err;
+  } else {
+    LOG(INFO) << "OpenSSL operating in FIPS validated mode of operation.";
+  }
+
   OpenSSL_add_all_algorithms();
   ERR_load_BIO_strings();
   ERR_load_crypto_strings();
