@@ -42,10 +42,7 @@ The main areas covered are:
 
 The supported platforms are:
 
- - **Linux**: tested on Ubuntu 14.04; other variants (Fedora 22, CentOS 7) may
-   require tweaking of [compiler options](#build-troubleshooting).
- - **OS X**: version 10.10
- - **FreeBSD**: version 10.*
+ - **Linux**: tested on Ubuntu 16.04;
 
 
 Build Quick Start
