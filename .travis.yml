@@ -89,7 +89,7 @@ install:
 # Workaround LLVM's apt mirror being feeble and underpowered
  - |
    if [ "$LLVM" != "" ]; then
-     CLANG_URL="http://llvm.org/releases/${LLVM}/clang+llvm-${LLVM}-x86_64-linux-gnu-ubuntu-14.04.tar.xz"
+     CLANG_URL="http://llvm.org/releases/${LLVM}/clang+llvm-${LLVM}-x86_64-linux-gnu-ubuntu-16.04.tar.xz"
      mkdir /tmp/clang && travis_retry wget --quiet -O - ${CLANG_URL} | tar --strip-components=1 -xJ -C /tmp/clang
      export PATH="/tmp/clang/bin:${PATH}"
     fi
