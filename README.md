@@ -55,13 +55,53 @@ retrieve and build the [other software](#software-dependencies) needed by the Lo
 and then use (GNU) `make` to build and test the CT code:
 
 ```bash
+#Assuming you are working with a new Ubuntu 16.04 image, where your username is "ubuntu":
+#
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get build-essential install autoconf automake libtool shtool cmake clang git make tcl pkg-config python2.7 docker.io 
+cd /usr/local/src
+sudo git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+export PATH=/usr/local/src/depot_tools:"$PATH"
 export CXX=clang++ CC=clang
-mkdir ct  # or whatever directory you prefer
+sudo mkdir ct
+sudo chown ubuntu ct
 cd ct
 gclient config --name="certificate-transparency" https://github.com/grandamp/certificate-transparency.git
-gclient sync --disable-syntax-validation  # retrieve and build dependencies
-# substitute gmake or gnumake below if that's what your platform calls it:
-make -C certificate-transparency check  # build the CT software & self-test
+gclient sync --disable-syntax-validation
+make -C certificate-transparency check
+#
+#I.e.,
+#
+#============================================================================
+#Testsuite summary for certificate-transparency 0.9
+#============================================================================
+## TOTAL: 41
+## PASS:  41
+## SKIP:  0
+## XFAIL: 0
+## FAIL:  0
+## XPASS: 0
+## ERROR: 0
+#============================================================================
+#
+make -C certificate-transparency install
+PROJECT=ctlog
+TAG=FIPS-Ubuntu-16.04
+sudo docker build -f Dockerfile -t ${PROJECT}/ct-log:${TAG} .
+sudo docker build -f Dockerfile-ct-mirror -t ${PROJECT}/ct-mirror:${TAG} .
+sudo docker build -f cloud/etcd/Dockerfile -t ${PROJECT}/etcd:${TAG} .
+sudo docker build -f cloud/prometheus/Dockerfile -t ${PROJECT}/prometheus:${TAG} .
+sudo docker images
+#
+#I.e.,
+#
+#REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+#ctlog/prometheus    FIPS-Ubuntu-16.04   918f1eb64823        4 hours ago         74.51 MB
+#ctlog/etcd          FIPS-Ubuntu-16.04   42ce7fd69729        4 hours ago         196.4 MB
+#ctlog/ct-mirror     FIPS-Ubuntu-16.04   682017b8d2e7        4 hours ago         293 MB
+#ctlog/ct-log        FIPS-Ubuntu-16.04   4e11f74daeae        5 hours ago         294.5 MB
+#...
 ```
 
 Code Layout
