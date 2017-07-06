@@ -85,7 +85,8 @@ make -C certificate-transparency check
 ## ERROR: 0
 #============================================================================
 #
-make -C certificate-transparency install
+sudo make -C certificate-transparency install
+cd certificate-transparency/
 PROJECT=ctlog
 TAG=FIPS-Ubuntu-16.04
 sudo docker build -f Dockerfile -t ${PROJECT}/ct-log:${TAG} .
