@@ -59,7 +59,7 @@ and then use (GNU) `make` to build and test the CT code:
 #
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get build-essential install autoconf automake libtool shtool cmake clang git make tcl pkg-config python2.7 docker.io 
+sudo apt-get install build-essential autoconf automake libtool shtool cmake clang git make tcl pkg-config python2.7 docker.io 
 cd /usr/local/src
 sudo git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 export PATH=/usr/local/src/depot_tools:"$PATH"
