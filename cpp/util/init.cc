@@ -69,7 +69,14 @@ void InitCT(int* argc, char** argv[]) {
     }
   }
   if(ret != 1) {
-    LOG(WARNING) << "Failed to set FIPS validated mode of operation: " << err;
+    ERR_load_crypto_strings();
+    LOG(WARNING) << "Failed to set FIPS validated mode of operation: " << ERR_error_string(err, NULL);
+    LOG(WARNING) << "OpenSSL Version: " << SSLeay_version(SSLEAY_VERSION);
+    LOG(WARNING) << "OpenSSL CFlags: " << SSLeay_version(SSLEAY_CFLAGS);
+    LOG(WARNING) << "OpenSSL BuiltOn: " << SSLeay_version(SSLEAY_BUILT_ON);
+    LOG(WARNING) << "OpenSSL Platform: " << SSLeay_version(SSLEAY_PLATFORM);
+    LOG(WARNING) << "OpenSSL Dir: " << SSLeay_version(SSLEAY_DIR);
+    ERR_free_strings();
   } else {
     LOG(INFO) << "OpenSSL operating in FIPS validated mode of operation.";
   }
